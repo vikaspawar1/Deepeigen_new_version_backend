@@ -308,7 +308,7 @@ PAYU_MODE = 'Live'
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:3000",
-    "deepeigen-new-version-frontend.onrender.com"
+    "https://deepeigen-new-version-frontend.onrender.com",
 ]
 
 if frontend_url:
