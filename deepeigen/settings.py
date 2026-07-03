@@ -91,7 +91,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://deepeigen-website-interntask-22.onrender.com"
+    "https://deepeigen-new-version-frontend.onrender.com/"
 ]
 
 # Add Render frontend URL if provided
@@ -308,6 +308,7 @@ PAYU_MODE = 'Live'
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:3000",
+    "deepeigen-new-version-frontend.onrender.com"
 ]
 
 if frontend_url:
