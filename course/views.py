@@ -380,9 +380,9 @@ def courses(request):
     is_admin = request.user.is_authenticated and (request.user.is_staff or request.user.is_superadmin)
     
     if featured == 'true' or not is_admin:
-        courses_qs = Course.objects.filter(is_featured=True).order_by('id')
+        courses_qs = Course.objects.filter(is_featured=True).order_by('-enrolled_users', 'id')
     else:
-        courses_qs = Course.objects.all().order_by('id')
+        courses_qs = Course.objects.all().order_by('-enrolled_users', 'id')
 
 
     courses = []
@@ -398,6 +398,7 @@ def courses(request):
             "foreign_fee": course.foreign_fee,
             "course_image": course.course_image.url if course.course_image else "",
             "assignments": course.assignments,
+            "enrolled_users": course.enrolled_users,
         })
 
     data = {

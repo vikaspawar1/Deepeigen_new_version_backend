@@ -717,6 +717,9 @@ def get_playlist_details(request, playlist_id):
                 'duration': lecture.duration,
                 'videoUrl': lecture.link,
                 'course': lecture.module.section.course.title,
+                'course_id': lecture.module.section.course.id,
+                'course_url': lecture.module.section.course.url_link_name,
+                'section_url': lecture.module.section.url_name,
                 'price': float(lecture_price.quantize(Decimal('0.01')))
             })
 
