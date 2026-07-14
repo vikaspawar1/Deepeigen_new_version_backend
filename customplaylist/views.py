@@ -67,10 +67,12 @@ def get_lecture_pricing_and_ownership(user, lecture, duration, user_enrolled_cou
     
     total_lectures = Video.objects.filter(module__section__course=course).count()
     
-    if total_lectures > 0:
-        # Formula: (Course Fee / Total Lectures) * (Selected Duration / Course Duration)
+    if already_owned:
+        lecture_price = Decimal('0.00')
+    elif total_lectures > 0:
+        # Formula: (Course Fee / Total Lectures) * (Selected Duration / Course Duration) * 1.01 (1% Premium Markup)
         base_lecture_price = course_fee / Decimal(total_lectures)
-        lecture_price = base_lecture_price * (Decimal(duration) / course_duration)
+        lecture_price = base_lecture_price * (Decimal(duration) / course_duration) * Decimal('1.01')
     else:
         lecture_price = Decimal('0.00')
             
@@ -252,7 +254,7 @@ def create_custom_playlist(request):
 
         if include_assignments:
             allowed_assignments = get_allowed_assignments(request.user, lecture_ids)
-            total_price += Decimal('100.00') * len(allowed_assignments) * Decimal(duration)
+            total_price += Decimal('100.00') * len(allowed_assignments)  # assignment price is fixed, not per month
 
         # Create Playlist
         playlist = CustomPlaylist.objects.create(
@@ -356,7 +358,7 @@ def preview_custom_playlist(request):
         assignments_data = []
         if include_assignments:
             assignments_data = get_allowed_assignments(request.user, lecture_ids)
-            total_price += Decimal('100.00') * len(assignments_data) * Decimal(duration)
+            total_price += Decimal('100.00') * len(assignments_data)  # assignment price is fixed, not per month
 
         return Response({
             "success": True,
@@ -437,7 +439,7 @@ def initiate_playlist_payment(request, playlist_id):
             # 100 per assignment per month (duration)
             l_ids = [pl.lecture.id for pl in playlist.playlist_lectures.all()]
             assignments_data = get_allowed_assignments(request.user, l_ids)
-            new_total_price += Decimal('100.00') * len(assignments_data) * Decimal(duration)
+            new_total_price += Decimal('100.00') * len(assignments_data)  # assignment price is fixed, not per month
             
         total_amount = float(new_total_price.quantize(Decimal('0.01')))
         
